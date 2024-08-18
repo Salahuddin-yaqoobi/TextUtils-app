@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 
 
 export default function TextForm(props) {
+  const [text, setText] = useState('');
     const handleUpClick = ()=>{
         let newText = text.toUpperCase();
         setText(newText);   //right way to change the state
@@ -28,27 +29,15 @@ export default function TextForm(props) {
     props.showAlert("Text is cleared","success");
 
    }
+   const copyText = ()=>{
+    navigator.clipboard.writeText(text);
+    props.showAlert("Copied to clipbord","success");
+   }
     
     const handleOnChange = (event)=>{
         console.log("clicked onchange");
         setText(event.target.value)
     }
-
-    const [text, setText] = useState('');
-    // const countWords = (str) => {
-      // let words;
-      // if (text == "") {
-  
-        // words = 0;
-      // } else {
-        // words = str.trim().split(/\s+/).length;
-      // }
-      // return words;
-    // };
-    //  const buttonTheme ={
-    //  backgroundColor: 
-    //  }
-
     const success = {
     backgroundColor : ()=>{
     if(props.newCls==='success'){
@@ -70,10 +59,11 @@ export default function TextForm(props) {
 <button style={success} disabled = {text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleUpClick}>Convert to uppercase</button>
 <button disabled = {text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleLoClick}>Convert to lowers</button>
 <button disabled = {text.length === 0} className="btn btn-primary mx-1 my-1" onClick={speak}>Listen words</button>
+<button disabled = {text.length === 0} className="btn btn-primary mx-1 my-1" onClick={copyText}>Copy</button>
 <button disabled = {text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleClear}>Clear</button>
 <div className="container my-3" style = {{color : props.mode === 'light'?'black':'white'}}>
     <h1>Your text summary</h1>
-    <p>{text.split(" ").filter((element)=>{return element !=0}).length} words and {text.length} characters</p>
+    <p>{text.split(/\s+/).filter((element)=>{return element !=0}).length} words and {text.length} characters</p>
     <p>{0.008 * text.split(" ").filter((element)=>{return element!=0}).length} Minutes read</p>
     <h2>Preview</h2>
     <p>{text.length>0?text:"Nothing to preview"}</p>
